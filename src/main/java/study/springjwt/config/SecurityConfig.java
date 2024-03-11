@@ -30,7 +30,7 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
 
-    private static final String loginProcessUrl = "/members/login";
+    private static final String loginProcessUrl = "/login";
 
     @Value("${spring.jwt.allowed-origins}")
     List<String> allowedOrigins;
@@ -73,6 +73,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login", "/", "/join").permitAll()
+                        .requestMatchers("/reissue").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
 
