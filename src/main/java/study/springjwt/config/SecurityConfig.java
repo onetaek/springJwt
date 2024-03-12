@@ -18,6 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import study.springjwt.jwt.JWTFilter;
 import study.springjwt.jwt.JWTUtil;
 import study.springjwt.jwt.LoginFilter;
+import study.springjwt.repository.RefreshRepository;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +30,7 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
+    private final RefreshRepository refreshRepository;
 
     private static final String loginProcessUrl = "/login";
 
@@ -82,7 +84,7 @@ public class SecurityConfig {
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
         //필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
-        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
+        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository);
         loginFilter.setFilterProcessesUrl(SecurityConfig.loginProcessUrl);
         http
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
